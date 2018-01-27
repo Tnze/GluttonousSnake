@@ -8,13 +8,14 @@ import (
 )
 
 func main() {
-	err := termbox.Init()
-	if err != nil {
-		panic(err)
-	}
+
 	defer termbox.Close()
 	var score int
 	for {
+		err := termbox.Init()
+		if err != nil {
+			panic(err)
+		}
 		d := [...]int{1, 0}
 		go func() {
 			for d[0] == 0 || d[1] == 0 {
@@ -35,6 +36,7 @@ func main() {
 			}
 		}()
 		score = gs.RunGame(&d)
+		termbox.Close()
 		fmt.Println("score:", score)
 
 	}
