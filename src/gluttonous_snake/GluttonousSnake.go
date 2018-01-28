@@ -5,8 +5,10 @@ import (
 	"time"
 )
 
+//地图大小
 const weight, hight = 16, 9
 
+//表示蛇
 type Snake [weight][hight]int
 
 func (s *Snake) SetBlock(b int, p [2]int) {
@@ -17,6 +19,7 @@ func (s *Snake) GetBlock(p [2]int) int {
 	return (*s)[p[0]][p[1]]
 }
 
+//运行游戏（支持并行运行）
 func RunGame(direction *int, printer chan<- Snake) (sorce int) {
 	var cDirection [2]int
 	var hand [2]int = [2]int{2, hight / 2}
@@ -24,7 +27,7 @@ func RunGame(direction *int, printer chan<- Snake) (sorce int) {
 	s[0][hight/2], s[1][hight/2], s[2][hight/2] = 1, 2, 3
 	addFood(&s)
 	for {
-		switch *direction {
+		switch *direction { //解析方向
 		case 1: //up
 			cDirection = [2]int{0, -1}
 		case 2: //down
@@ -34,16 +37,17 @@ func RunGame(direction *int, printer chan<- Snake) (sorce int) {
 		case 4: //right
 			cDirection = [2]int{1, 0}
 		}
+		//计算蛇头下一步的位置
 		var newHand [2]int = [2]int{(hand[0] + cDirection[0] + weight) % weight, (hand[1] + cDirection[1] + hight) % hight}
-		b := s.GetBlock(newHand)
+		b := s.GetBlock(newHand) //取蛇头将要碰到的物体
 		switch {
-		case b == 0:
+		case b == 0: //如果是空的
 			through(&s)
 			s.SetBlock(s.GetBlock(hand)+1, newHand)
-		case b < 0:
+		case b < 0: //如果是食物
 			s.SetBlock(s.GetBlock(hand)+1, newHand)
 			addFood(&s)
-		case b > 0:
+		case b > 0: //如果是蛇身
 			return score(s)
 		}
 		printer <- s
@@ -52,6 +56,7 @@ func RunGame(direction *int, printer chan<- Snake) (sorce int) {
 	}
 }
 
+//使蛇变短
 func through(s *Snake) {
 	for i := 0; i < weight; i++ {
 		for j := 0; j < hight; j++ {
@@ -62,6 +67,7 @@ func through(s *Snake) {
 	}
 }
 
+//计算分数
 func score(s Snake) (max int) {
 	for i := 0; i < weight; i++ {
 		for j := 0; j < hight; j++ {
@@ -73,6 +79,7 @@ func score(s Snake) (max int) {
 	return
 }
 
+//随机添加食物
 func addFood(s *Snake) {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	var x, y int = r.Intn(weight), r.Intn(hight)
