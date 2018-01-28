@@ -1,30 +1,40 @@
 package gluttonous_snake
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 )
 
 const weight, hight = 16, 9
 
-type snake [weight][hight]int
+type Snake [weight][hight]int
 
-func (s *snake) SetBlock(b int, p [2]int) {
+func (s *Snake) SetBlock(b int, p [2]int) {
 	s[p[0]][p[1]] = b
 }
 
-func (s *snake) GetBlock(p [2]int) int {
+func (s *Snake) GetBlock(p [2]int) int {
 	return (*s)[p[0]][p[1]]
 }
 
-func RunGame(direction *[2]int) (sorce int) {
+func RunGame(direction *int, printer chan<- Snake) (sorce int) {
+	var cDirection [2]int
 	var hand [2]int = [2]int{2, hight / 2}
-	var s snake
+	var s Snake
 	s[0][hight/2], s[1][hight/2], s[2][hight/2] = 1, 2, 3
 	addFood(&s)
 	for {
-		var newHand [2]int = [2]int{(hand[0] + direction[0] + weight) % weight, (hand[1] + direction[1] + hight) % hight}
+		switch *direction {
+		case 1: //up
+			cDirection = [2]int{0, -1}
+		case 2: //down
+			cDirection = [2]int{0, 1}
+		case 3: //left
+			cDirection = [2]int{-1, 0}
+		case 4: //right
+			cDirection = [2]int{1, 0}
+		}
+		var newHand [2]int = [2]int{(hand[0] + cDirection[0] + weight) % weight, (hand[1] + cDirection[1] + hight) % hight}
 		b := s.GetBlock(newHand)
 		switch {
 		case b == 0:
@@ -36,14 +46,13 @@ func RunGame(direction *[2]int) (sorce int) {
 		case b > 0:
 			return score(s)
 		}
-
-		printSnake(s)
+		printer <- s
 		hand = newHand
-		time.Sleep(time.Millisecond * 100)
+		time.Sleep(time.Millisecond * 400)
 	}
 }
 
-func through(s *snake) {
+func through(s *Snake) {
 	for i := 0; i < weight; i++ {
 		for j := 0; j < hight; j++ {
 			if s.GetBlock([2]int{i, j}) != 0 {
@@ -53,7 +62,7 @@ func through(s *snake) {
 	}
 }
 
-func score(s snake) (max int) {
+func score(s Snake) (max int) {
 	for i := 0; i < weight; i++ {
 		for j := 0; j < hight; j++ {
 			if max < s.GetBlock([2]int{i, j}) {
@@ -64,23 +73,7 @@ func score(s snake) (max int) {
 	return
 }
 
-func printSnake(s snake) {
-	fmt.Print("\n\n\n")
-	for i := 0; i < hight; i++ {
-		for j := 0; j < weight; j++ {
-			if s.GetBlock([2]int{j, i}) > 0 {
-				fmt.Print("●")
-			} else if s.GetBlock([2]int{j, i}) < 0 {
-				fmt.Print("☀")
-			} else {
-				fmt.Print("○")
-			}
-		}
-		fmt.Println()
-	}
-}
-
-func addFood(s *snake) {
+func addFood(s *Snake) {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	var x, y int = r.Intn(weight), r.Intn(hight)
 	for s.GetBlock([2]int{x, y}) != 0 {
