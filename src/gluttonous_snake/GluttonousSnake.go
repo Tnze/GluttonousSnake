@@ -21,12 +21,12 @@ type Snake struct {
 
 //SetBlock 方法设置地图上的元素
 func (s *Snake) SetBlock(b int, p [2]int) {
-	s.s[p[0]][p[1]] = b
+	s.s[(p[0]+Weight)%Weight][(p[1]+Hight)%Hight] = b
 }
 
 //GetBlock 方法获取地图上的元素
 func (s *Snake) GetBlock(p [2]int) int {
-	return s.s[p[0]][p[1]]
+	return s.s[(p[0]+Weight)%Weight][(p[1]+Hight)%Hight]
 }
 
 //NewSnake 函数初始化一条新蛇

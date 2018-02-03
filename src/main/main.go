@@ -14,7 +14,7 @@ func main() {
 	draw.OpenWindow(func() *gs.Snake {
 		if t > 10 {
 			score, isEnd := snake.Step(direction)
-			fmt.Printf("\fscore:	%d", score)
+			fmt.Printf("\rscore:	%d", score)
 			t = 0
 			if isEnd {
 				snake = gs.NewSnake()
