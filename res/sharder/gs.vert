@@ -1,11 +1,12 @@
 #version 330
 
-in vec3 vert;
-in vec2 vertTexCoord;
+in vec2 vert;
+in vec3 color;
 
-out vec2 fragTexCoord;
+out vec3 fragColor;
 
 void main() {
-    fragTexCoord = vertTexCoord;
-    gl_Position = vec4(vert, 1);
+    gl_Position = vec4(vert, 0, 1);
+    gl_PointSize =30;
+    fragColor = color;
 }
