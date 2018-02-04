@@ -61,7 +61,7 @@ func (s *Snake) Step(direction int) (sorce int, isEnd bool) {
 	s.lastDirection = cDirection
 	//计算蛇头下一步的位置
 	var newHand = [2]int{(s.hand[0] + cDirection[0] + Weight) % Weight, (s.hand[1] + cDirection[1] + Hight) % Hight}
-	b := s.GetBlock(newHand) //取蛇头将要碰到的物体
+	b := changeBlock( s.GetBlock(newHand)) //取蛇头将要碰到的物体
 	switch {
 	case b == 0: //如果是空的
 		through(s)
@@ -82,11 +82,17 @@ func (s *Snake) Step(direction int) (sorce int, isEnd bool) {
 func through(s *Snake) {
 	for i := 0; i < Weight; i++ {
 		for j := 0; j < Hight; j++ {
-			if s.GetBlock([2]int{i, j}) != 0 {
-				s.SetBlock(s.GetBlock([2]int{i, j})-1, [2]int{i, j})
-			}
+			location := [2]int{i,j}
+			s.SetBlock(changeBlock(s.GetBlock(location)), location)
 		}
 	}
+}
+
+func changeBlock(b int) int {
+	if b !=0 {
+		return b-1
+	}
+	return 0
 }
 
 //计算分数

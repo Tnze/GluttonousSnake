@@ -1,12 +1,15 @@
 #version 330
 
 in vec2 vert;
-in vec3 color;
+in float color;
 
-out vec3 fragColor;
+out float fragColor;
 
 void main() {
     gl_Position = vec4(vert, 0, 1);
-    gl_PointSize =30;
+    if (color <= 0)
+        gl_PointSize = 35;
+    else if (color > 0)
+        gl_PointSize = max(40,30 + color) ;
     fragColor = color;
 }

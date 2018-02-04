@@ -139,20 +139,15 @@ func OpenWindow(getsnake func() *gs.Snake, reciveKey func(direction int)) error 
 	for !window.ShouldClose() {
 		s := getsnake()
 		//计算点的位置
-		var points [gs.Weight * gs.Hight * 5]float32
+		var points [gs.Weight * gs.Hight * 3]float32
 		const cubeW float32 = 2.0 / gs.Weight
 		const cubeH float32 = 2.0 / gs.Hight
 		for i := 0; i < gs.Weight; i++ {
 			for j := 0; j < gs.Hight; j++ {
-				var r, g, b float32
-				if s.GetBlock([2]int{i, j}) > 0 {
-					r, g, b = 1, 1, 1
-				} else if s.GetBlock([2]int{i, j}) < 0 {
-					r, g, b = 1, 0, 0
-				}
-				point := []float32{cubeW/2 + float32(i)*cubeW - 1, -cubeH/2 - float32(j)*cubeH + 1, r, g, b}
+				color := float32(s.GetBlock([2]int{i, j}))
+				point := []float32{cubeW/2 + float32(i)*cubeW - 1, -cubeH/2 - float32(j)*cubeH + 1, color}
 				//fmt.Printf("kkkk	%d   %d 	%d\n", i, j, gs.Weight*j+i*5)//查看下标是否计算正确
-				p := points[(j*gs.Weight+i)*5:]
+				p := points[(j*gs.Weight+i)*3:]
 				copy(p, point)
 			}
 		}
@@ -172,10 +167,10 @@ func OpenWindow(getsnake func() *gs.Snake, reciveKey func(direction int)) error 
 		//取着色器传入值
 		vertAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vert\x00")))
 		gl.EnableVertexAttribArray(vertAttrib)
-		gl.VertexAttribPointer(vertAttrib, 2, gl.FLOAT, false, 5*4, gl.PtrOffset(0))
+		gl.VertexAttribPointer(vertAttrib, 2, gl.FLOAT, false, 3*4, gl.PtrOffset(0))
 		colorAttrib := uint32(gl.GetAttribLocation(program, gl.Str("color\x00")))
 		gl.EnableVertexAttribArray(colorAttrib)
-		gl.VertexAttribPointer(colorAttrib, 3, gl.FLOAT, false, 5*4, gl.PtrOffset(2*4))
+		gl.VertexAttribPointer(colorAttrib, 3, gl.FLOAT, false, 3*4, gl.PtrOffset(2*4))
 
 		gl.BindVertexArray(vao)
 		gl.Enable(gl.PROGRAM_POINT_SIZE)
