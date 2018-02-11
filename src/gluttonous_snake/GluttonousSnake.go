@@ -21,12 +21,25 @@ type Snake struct {
 
 //SetBlock 方法设置地图上的元素
 func (s *Snake) SetBlock(b int, p [2]int) {
-	s.s[(p[0]+Weight)%Weight][(p[1]+Hight)%Hight] = b
+	p = FormattingCoordinates(p)
+	s.s[p[0]][p[1]] = b
 }
 
 //GetBlock 方法获取地图上的元素
 func (s *Snake) GetBlock(p [2]int) int {
-	return s.s[(p[0]+Weight)%Weight][(p[1]+Hight)%Hight]
+	p = FormattingCoordinates(p)
+	return s.s[p[0]][p[1]]
+}
+func FormattingCoordinates(c [2]int) [2]int {
+	for c[0] < 0 {
+		c[0] += Weight
+	}
+	for c[1] < 0 {
+		c[1] += Hight
+	}
+	c[0] %= Weight
+	c[1] %= Hight
+	return c
 }
 
 //NewSnake 函数初始化一条新蛇
@@ -61,7 +74,7 @@ func (s *Snake) Step(direction int) (sorce int, isEnd bool) {
 	s.lastDirection = cDirection
 	//计算蛇头下一步的位置
 	var newHand = [2]int{(s.hand[0] + cDirection[0] + Weight) % Weight, (s.hand[1] + cDirection[1] + Hight) % Hight}
-	b := changeBlock( s.GetBlock(newHand)) //取蛇头将要碰到的物体
+	b := changeBlock(s.GetBlock(newHand)) //取蛇头将要碰到的物体
 	switch {
 	case b == 0: //如果是空的
 		through(s)
@@ -82,15 +95,15 @@ func (s *Snake) Step(direction int) (sorce int, isEnd bool) {
 func through(s *Snake) {
 	for i := 0; i < Weight; i++ {
 		for j := 0; j < Hight; j++ {
-			location := [2]int{i,j}
+			location := [2]int{i, j}
 			s.SetBlock(changeBlock(s.GetBlock(location)), location)
 		}
 	}
 }
 
 func changeBlock(b int) int {
-	if b !=0 {
-		return b-1
+	if b != 0 {
+		return b - 1
 	}
 	return 0
 }
