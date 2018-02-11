@@ -13,7 +13,7 @@ func main() {
 	t := time.Now()
 	draw.OpenWindow(func() *gs.Snake {
 		if time.Now().Sub(t)/time.Millisecond > 250 {
-			score, isEnd := snake.Step(direction)
+			score, isEnd := snake.Step(0)
 			fmt.Printf("\rscore:	%d", score)
 			if isEnd {
 				snake = gs.NewSnake()
