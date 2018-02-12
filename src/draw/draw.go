@@ -163,7 +163,7 @@ func OpenWindow(getsnake func() *gs.Snake, reciveKey func(direction int)) error 
 		var vbo uint32
 		gl.GenBuffers(1, &vbo)
 		gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
-		gl.BufferData(gl.ARRAY_BUFFER, len(points)*4, gl.Ptr(points[:]), gl.STATIC_DRAW)
+		gl.BufferData(gl.ARRAY_BUFFER, len(points)*4+1, gl.Ptr(points[:]), gl.STATIC_DRAW)
 		//取着色器传入值
 		vertAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vert\x00")))
 		gl.EnableVertexAttribArray(vertAttrib)
@@ -174,7 +174,7 @@ func OpenWindow(getsnake func() *gs.Snake, reciveKey func(direction int)) error 
 
 		gl.BindVertexArray(vao)
 		gl.Enable(gl.PROGRAM_POINT_SIZE)
-		gl.DrawArrays(gl.POINTS, 0, gs.Weight*gs.Hight)
+		gl.DrawArrays(gl.POINTS, 0, gs.Weight*gs.Hight+1)
 		window.SwapBuffers()
 		glfw.PollEvents()
 	}

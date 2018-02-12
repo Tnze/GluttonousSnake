@@ -80,7 +80,7 @@ func ManhattanDistance(p1, p2 [2]int) int {
 		y += gs.Hight
 	}
 	x = min(x, gs.Weight-x)
-	y = min(y, gs.Hight)
+	y = min(y, gs.Hight-y)
 	return x + y
 }
 func min(n1, n2 int) int {
@@ -126,7 +126,7 @@ func findTail(s *gs.Snake) (path []int, canFindPath bool) {
 func aStar(s *gs.Snake, p1, p2 [2]int) ([]int, bool) {
 	open := NewQueue()
 	close := NewQueue()
-	open.push(NewCell(p1, 0, ManhattanDistance(p1, p2), nil)) //将起点加入到Open
+	open.push(NewCell(p1, 0 /* ManhattanDistance(p1, p2)*/, 0, nil)) //将起点加入到Open
 	for {
 		//fmt.Println("Running.......")
 		U, bErr := open.popMinF()
@@ -154,7 +154,7 @@ func aStar(s *gs.Snake, p1, p2 [2]int) ([]int, bool) {
 				}
 			} else {
 				//若V不在open表中
-				newCell := NewCell(v, U.G+1, ManhattanDistance(v, p2), U)
+				newCell := NewCell(v, U.G+1, 0 /*ManhattanDistance(v, p2)*/, U)
 				open.push(newCell)
 			}
 		}

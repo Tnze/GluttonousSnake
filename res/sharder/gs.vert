@@ -10,6 +10,6 @@ void main() {
     if (color <= 0)
         gl_PointSize = 35;
     else if (color > 0)
-        gl_PointSize = max(40,30 + color) ;
+        gl_PointSize = max(40,min(30 + color,60) );
     fragColor = color;
 }
