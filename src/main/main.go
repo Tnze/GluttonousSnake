@@ -12,8 +12,8 @@ func main() {
 	snake := gs.NewSnake()
 	direction := 0
 	t := time.Now()
-	draw.OpenWindow(func() *gs.Snake {
-		if time.Now().Sub(t)/time.Millisecond > 40 {
+	err := draw.OpenWindow(func() *gs.Snake {
+		if time.Now().Sub(t)/time.Millisecond > 100 {
 			score, isEnd := snake.Step(ai.NextStep(snake))
 			fmt.Printf("\rscore:	%d", score)
 			if isEnd {
@@ -28,4 +28,7 @@ func main() {
 		time.Sleep(20 * time.Millisecond)
 		return snake
 	}, func(dir int) {})
+	if err != nil {
+		panic(err)
+	}
 }

@@ -89,9 +89,17 @@ func OpenWindow(getsnake func() *gs.Snake, reciveKey func(direction int)) error 
 		return err
 	}
 	defer glfw.Terminate()
-	glfw.WindowHint(glfw.Resizable, glfw.False)
+
+	// 初始化 GL
+	if err := gl.Init(); err != nil {
+		panic(err)
+	}
+
+	//glfw.WindowHint(glfw.Resizable, glfw.False)
 	glfw.WindowHint(glfw.ContextVersionMajor, 4)
 	glfw.WindowHint(glfw.ContextVersionMinor, 1)
+	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCoreProfile)
+	glfw.WindowHint(glfw.OpenGLForwardCompatible, gl.TRUE)
 	window, err := glfw.CreateWindow(windowW, windowH, "贪吃蛇", nil, nil)
 	if err != nil {
 		return err
@@ -112,10 +120,6 @@ func OpenWindow(getsnake func() *gs.Snake, reciveKey func(direction int)) error 
 			}
 		}
 	})
-	// 初始化 GL
-	if err := gl.Init(); err != nil {
-		panic(err)
-	}
 
 	//打印OpenGL版本
 	version := gl.GoStr(gl.GetString(gl.VERSION))

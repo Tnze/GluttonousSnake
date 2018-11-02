@@ -1,0 +1,35 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "go run ../src/main/main.go",
+            "problemMatcher": [
+                "$go"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/bin", //配置运行目录
+                "env": {
+                    "GOPATH": "${workspaceFolder}" //配置GOPATH
+                }
+            }
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "go build ../src/main/main.go",
+            "problemMatcher": [
+                "$go"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/bin", //配置运行目录
+                "env": {
+                    "GOPATH": "${workspaceFolder}" //配置GOPATH
+                }
+            }
+        }
+    ]
+}
