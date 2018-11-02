@@ -13,7 +13,7 @@ func main() {
 	direction := 0
 	t := time.Now()
 	err := draw.OpenWindow(func() *gs.Snake {
-		if time.Now().Sub(t)/time.Millisecond > 100 {
+		if time.Now().Sub(t)/time.Millisecond > 125 {
 			score, isEnd := snake.Step(ai.NextStep(snake))
 			fmt.Printf("\rscore:	%d", score)
 			if isEnd {
