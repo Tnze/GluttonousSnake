@@ -19,7 +19,7 @@ func NextStep(s *gs.Snake) (direction int) {
 			return path[0]
 		}
 	}
-	fmt.Println("安全步骤")
+	fmt.Print("安全步骤")
 	return getSafestStep(s)
 }
 
@@ -57,7 +57,7 @@ func getSafestStep(s *gs.Snake) int {
 		}
 	}
 	if max == 0 {
-		fmt.Println("安全计算失败")
+		fmt.Print("安全计算失败")
 	}
 	return d
 }
